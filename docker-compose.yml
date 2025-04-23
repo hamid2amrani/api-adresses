@@ -1,0 +1,17 @@
+version: '3.9'
+
+services:
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - db-data:/data
+    environment:
+      - DATABASE_URL=sqlite:////data/db.sqlite
+    command: >
+      sh -c "python manage.py migrate &&
+             gunicorn core.wsgi:application --bind 0.0.0.0:8000"
+
+volumes:
+  db-data:
